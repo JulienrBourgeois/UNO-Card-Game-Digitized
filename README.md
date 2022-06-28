@@ -1,0 +1,2 @@
+# UNO-Card-Game-Digitized
+This project was my first every computer science project. I completed it my sophomore year of high school for the Create Performance Task for my AP Computer Science Principles class. Making this program was a great experience and really sparked my love for programming. However, looking back at it all of these years later, I realized how much more I could have optimized and expanded upon this game.
