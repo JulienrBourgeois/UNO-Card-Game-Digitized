@@ -1,0 +1,942 @@
+//various lists that I have made in order to make my app function better 
+  var imageList=getColumn("UNO Card Deck","Image");
+  var playerCardList=[];
+  var playerColorList=[];
+  var playerNumberList=[];
+  var computerCardList=[];
+  var playedCardList=[];
+  var colorList=getColumn("UNO Card Deck","Color");
+  var numberList=getColumn("UNO Card Deck","Number");
+  var computerColorList=[];
+  var computerNumberList=[];
+  var playedColorList=[];
+  var playedNumberList=[];
+  
+  
+ 
+  
+  
+  
+  playSound("uno.mp3",true);
+  
+//uno button is used when player has one or two cards left
+//it also helps control the sound system in my app
+onEvent("unoButton", "click", function( ) {
+
+  var unoName=getText("nameInput");
+  
+   if (playerCardList.length==1||playerCardList.length==0) {
+     playSound("sound://category_achievements/melodic_win_1.mp3");
+       stopSound("unos.mp3");
+      setScreen("winnerScreen");
+      setText("winnerTitle","YOU WIN!");
+      setText("winnerText","The winner of UNO is..."+ unoName +"! Congratulations on defeating the one and only computer in a game of UNO!");
+    }else{
+      playSound("sound://category_digital/failure.mp3");
+    }
+    
+    
+ 
+  
+  
+      
+
+    
+ 
+     
+    
+     
+    
+     
+  });
+    
+  
+  
+//the on events for each card. When a card is clicked, if it is valid, it will be placed. Uses the player Turn based on a given index 
+onEvent("card1", "click", function( ) {
+  playerTurn(0);
+  });
+  
+onEvent("card2", "click", function( ) {
+   playerTurn(1);
+  });
+    
+  onEvent("card3", "click", function( ) {
+  playerTurn(2);
+  });
+  
+  onEvent("card4", "click", function( ) {
+  playerTurn(3);
+  });
+  
+  onEvent("card5", "click", function( ) {
+  playerTurn(4);
+  });
+  
+  onEvent("card6", "click", function( ) {
+  playerTurn(5);
+  });
+  
+  onEvent("card7", "click", function( ) {
+  playerTurn(6);
+  });
+
+  
+
+    
+  
+//determines eveything that occurs during the player's turn
+//the player stacks up cards that match numerically or by color until left with one card
+//when skip button is clicked, computer turn starts
+//the given index in the parameter determines which card image it is being set too
+function playerTurn(index) {
+  
+  if (playerCardList[index]==playedCardList[0]||playerColorList[index]==playedColorList[0]||playerNumberList[index]==playedNumberList[0]) {
+
+playSound("sound://category_accent/puzzle_game_accent_a_02.mp3");
+
+insertItem(playedCardList,0,playerCardList[index]);
+insertItem(playedColorList,0,playerColorList[index]);
+insertItem(playedNumberList,0,playerNumberList[index]);
+
+removeItem(playerCardList,index);
+removeItem(playerColorList,index);
+removeItem(playerNumberList,index);
+
+setImageURL("playedCard",playedCardList[0]);
+
+    } else {
+      playSound("sound://category_digital/failure.mp3");
+    }
+  
+ 
+    
+if (playedNumberList[0]==11) {
+  appendItem(computerCardList,imageList[randomNumber(0,imageList.length-1)]);
+   appendItem(computerCardList,imageList[randomNumber(0,imageList.length-1)]);
+}
+
+
+
+  
+  
+setImageURL("card1",playerCardList[0]);     
+setImageURL("card2",playerCardList[1]);
+setImageURL("card3",playerCardList[2]);
+setImageURL("card4",playerCardList[3]);
+setImageURL("card5",playerCardList[4]);
+setImageURL("card6",playerCardList[5]);
+setImageURL("card7",playerCardList[6]);  
+
+  
+
+
+}  
+  
+
+
+//adds one card to player deck and removes that card from the main deck
+// is only used when it is the player's turn 
+onEvent("skipButton", "click", function( ) {
+  
+  playSound("sound://category_instrumental/chime.mp3");
+
+var random=randomNumber(0,imageList.length-1);
+
+ appendItem(playerCardList,imageList[random]);
+ appendItem(playerNumberList,numberList[random]);
+ appendItem(playerColorList,colorList[random]);
+ 
+if (playerCardList.length==9) {
+  stopSound("unos.mp3");
+  playSound("sound://category_digital/failure.mp3");
+  setScreen("winnerScreen");
+  setText("winnerTitle","YOU LOSE:(");
+  setText("winnerText","Better Luck Next Time...");
+}
+ 
+
+ 
+setImageURL("card1",playerCardList[0]);     
+setImageURL("card2",playerCardList[1]);
+setImageURL("card3",playerCardList[2]);
+setImageURL("card4",playerCardList[3]);
+setImageURL("card5",playerCardList[4]);
+setImageURL("card6",playerCardList[5]);
+setImageURL("card7",playerCardList[6]);  
+
+
+
+
+setText("turnHeading","Computer Turn");
+var turn=getText("turnHeading");
+
+if(turn=="Computer Turn"){
+  computerTurn();
+}
+
+
+
+});
+
+
+
+//runs through the computers lists and attempts to get rid of cards before the user
+//just a constant loop of matching the list with the played card 
+// helps decide the winner
+function computerTurn() {
+  
+
+  
+
+ 
+ if (computerColorList[0]==playedColorList[0]||computerNumberList[0]==playedNumberList[0]) {
+  
+  setProperty("turnHeading","text","Player Turn");
+  
+   insertItem(playedCardList,0,computerCardList[0]);
+  insertItem(playedColorList,0,computerColorList[0]);
+  insertItem(playedNumberList,0,computerNumberList[0]);
+  
+  
+  removeItem(computerCardList,0);
+  removeItem(computerColorList,0);
+  removeItem(computerNumberList,0);
+  
+  setImageURL("playedCard",playedCardList[0]);
+ }
+ 
+  else if (computerColorList[1]==playedColorList[0]||computerNumberList[1]==playedNumberList[0]) {
+  
+   insertItem(playedCardList,0,computerCardList[1]);
+  insertItem(playedColorList,0,computerColorList[1]);
+  insertItem(playedNumberList,0,computerNumberList[1]);
+   setProperty("turnHeading","text","Player Turn");
+  
+  removeItem(computerCardList,1);
+  removeItem(computerColorList,1);
+  removeItem(computerNumberList,1);
+  
+  setImageURL("playedCard",playedCardList[0]);
+ }
+ 
+   else if (computerColorList[2]==playedColorList[0]||computerNumberList[2]==playedNumberList[0]) {
+  
+   insertItem(playedCardList,0,computerCardList[2]);
+  insertItem(playedColorList,0,computerColorList[2]);
+  insertItem(playedNumberList,0,computerNumberList[2]);
+  
+   setProperty("turnHeading","text","Player Turn");
+  removeItem(computerCardList,2);
+  removeItem(computerColorList,2);
+  removeItem(computerNumberList,2);
+  
+  setImageURL("playedCard",playedCardList[0]);
+ }
+ 
+  else if (computerColorList[3]==playedColorList[0]||computerNumberList[3]==playedNumberList[0]) {
+  
+   insertItem(playedCardList,0,computerCardList[3]);
+  insertItem(playedColorList,0,computerColorList[3]);
+  insertItem(playedNumberList,0,computerNumberList[3]);
+  
+   setProperty("turnHeading","text","Player Turn");
+  removeItem(computerCardList,3);
+  removeItem(computerColorList,3);
+  removeItem(computerNumberList,3);
+  
+  setImageURL("playedCard",playedCardList[0]);
+ }
+ 
+  else if (computerColorList[4]==playedColorList[0]||computerNumberList[4]==playedNumberList[0]) {
+  
+   insertItem(playedCardList,0,computerCardList[4]);
+  insertItem(playedColorList,0,computerColorList[4]);
+  insertItem(playedNumberList,0,computerNumberList[4]);
+   setProperty("turnHeading","text","Player Turn");
+  
+  removeItem(computerCardList,4);
+  removeItem(computerColorList,4);
+  removeItem(computerNumberList,4);
+  
+  setImageURL("playedCard",playedCardList[0]);
+ }
+    
+   else if (computerColorList[5]==playedColorList[0]||computerNumberList[5]==playedNumberList[0]) {
+  
+   insertItem(playedCardList,0,computerCardList[5]);
+  insertItem(playedColorList,0,computerColorList[5]);
+  insertItem(playedNumberList,0,computerNumberList[5]);
+ setProperty("turnHeading","text","Player Turn");
+  
+  removeItem(computerCardList,5);
+  removeItem(computerColorList,5);
+  removeItem(computerNumberList,5);
+  
+  setImageURL("playedCard",playedCardList[0]);
+ 
+ 
+   }
+    
+   else if (computerColorList[6]==playedColorList[0]||computerNumberList[6]==playedNumberList[0]) {
+  
+   insertItem(playedCardList,0,computerCardList[6]);
+  insertItem(playedColorList,0,computerColorList[6]);
+  insertItem(playedNumberList,0,computerNumberList[6]);
+
+   setProperty("turnHeading","text","Player Turn");
+  removeItem(computerCardList,6);
+  removeItem(computerColorList,6);
+  removeItem(computerNumberList,6);
+  
+  setImageURL("playedCard",playedCardList[0]);
+ 
+ 
+ 
+   }
+    
+   else if (computerColorList[7]==playedColorList[0]||computerNumberList[7]==playedNumberList[0]) {
+  
+   insertItem(playedCardList,0,computerCardList[7]);
+  insertItem(playedColorList,0,computerColorList[7]);
+  insertItem(playedNumberList,0,computerNumberList[7]);
+ setProperty("turnHeading","text","Player Turn");
+  
+  removeItem(computerCardList,7);
+  removeItem(computerColorList,7);
+  removeItem(computerNumberList,7);
+  
+  setImageURL("playedCard",playedCardList[0]);
+ 
+ 
+ 
+   }
+    
+   else if (computerColorList[8]==playedColorList[0]||computerNumberList[8]==playedNumberList[0]) {
+  
+   insertItem(playedCardList,0,computerCardList[8]);
+  insertItem(playedColorList,0,computerColorList[8]);
+  insertItem(playedNumberList,0,computerNumberList[8]);
+ setProperty("turnHeading","text","Player Turn");
+  
+  removeItem(computerCardList,8);
+  removeItem(computerColorList,8);
+  removeItem(computerNumberList,8);
+  
+  setImageURL("playedCard",playedCardList[0]);
+ 
+ 
+ 
+   } else  {
+     
+appendItem(computerCardList,imageList[randomNumber(0,imageList.length-1)]);
+  
+setText("turnHeading","Player Turn");  
+ 
+     
+
+  
+   
+ }
+
+
+
+    
+  
+  
+  
+  
+setImageURL("card1",playerCardList[0]);     
+setImageURL("card2",playerCardList[1]);
+setImageURL("card3",playerCardList[2]);
+setImageURL("card4",playerCardList[3]);
+setImageURL("card5",playerCardList[4]);
+setImageURL("card6",playerCardList[5]);
+setImageURL("card7",playerCardList[6]);  
+  
+  
+   
+
+
+if (computerCardList.length==0||computerCardList.length==1) {
+   stopSound("unos.mp3");
+  playSound("sound://category_digital/failure.mp3");
+  setScreen("winnerScreen");
+  setText("winnerTitle","YOU LOSE:(");
+  setText("winnerText","Better Luck Next Time...");
+  
+}
+
+if (computerCardList.length==10&&playerCardList==9) {
+   stopSound("unos.mp3");
+  setScreen("winnerScreen");
+  setText("winnerTitle","Draw");
+  setText("winnerText","It's a draw! Good Game.");
+}
+
+
+    
+if (computerCardList.length==10) {
+  stopSound("unos.mp3");
+  playSound("sound://category_achievements/melodic_win_1.mp3");
+  setScreen("winnerScreen");
+  setText("winnerText","The winner of UNO is... "+getText("nameInput")+"! Congratulations on defeating the one and only computer in a game of UNO!");
+
+
+
+}
+}
+
+
+
+
+
+
+
+
+
+
+
+//when the draw button is clicked, 7 random cards are added to player 1's deck
+//the images of these cards are then set to card image 1-7 revealing the player's cards
+//7 other random cards are also added to the computer's deck
+//there are also custom color and number lists for later on when we make the conditionals 
+//all 14 cards are removed from the list of the deck. One of the computer's cards is placed down at the start and removed from the computer list
+onEvent("drawButton", "click", function( ) {
+  
+  
+
+  
+  stopSound("uno.mp3");
+
+
+
+
+ 
+  
+  var playerName=getText("nameInput");
+  setText("turnHeading",playerName+"'s"+" "+"Turn");
+  
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+drawCards();
+
+
+
+
+
+
+
+});
+
+
+
+
+
+
+function drawCards() {
+  
+setScreen("gameScreen2");
+
+
+  playSound("sound://category_achievements/vibrant_game_achievement_3.mp3");
+
+
+var card1=randomNumber(0,imageList.length-1);
+var card2=randomNumber(0,imageList.length-1);
+var card3=randomNumber(0,imageList.length-1);
+var card4=randomNumber(0,imageList.length-1);
+var card5=randomNumber(0,imageList.length-1);
+var card6=randomNumber(0,imageList.length-1);
+var card7=randomNumber(0,imageList.length-1);
+
+var ccard1=randomNumber(0,imageList.length-1);
+var ccard2=randomNumber(0,imageList.length-1);
+var ccard3=randomNumber(0,imageList.length-1);
+var ccard4=randomNumber(0,imageList.length-1);
+var ccard5=randomNumber(0,imageList.length-1);
+var ccard6=randomNumber(0,imageList.length-1);
+var ccard7=randomNumber(0,imageList.length-1);
+
+appendItem(playerCardList,Julien.getCard(card1));
+appendItem(playerColorList,Julien.getColor(card1));
+appendItem(playerNumberList,Julien.getNumbers(card1));
+-
+appendItem(playerCardList,Julien.getCard(card2));
+appendItem(playerColorList,Julien.getColor(card2));
+appendItem(playerNumberList,Julien.getNumbers(card2));
+
+appendItem(playerCardList,Julien.getCard(card3));
+appendItem(playerColorList,Julien.getColor(card3));
+appendItem(playerNumberList,Julien.getNumbers(card3));
+
+appendItem(playerCardList,Julien.getCard(card4));
+appendItem(playerColorList,Julien.getColor(card4));
+appendItem(playerNumberList,Julien.getNumbers(card4));
+
+appendItem(playerCardList,Julien.getCard(card5));
+appendItem(playerColorList,Julien.getColor(card5));
+appendItem(playerNumberList,Julien.getNumbers(card5));
+
+appendItem(playerCardList,Julien.getCard(card6));
+appendItem(playerColorList,Julien.getColor(card6));
+appendItem(playerNumberList,Julien.getNumbers(card6));
+
+appendItem(playerCardList,Julien.getCard(card7));
+appendItem(playerColorList,Julien.getColor(card7));
+appendItem(playerNumberList,Julien.getNumbers(card7));
+
+
+
+
+
+appendItem(computerCardList,Julien.getCard(ccard1));
+appendItem(computerColorList,Julien.getColor(ccard1));
+appendItem(computerNumberList,Julien.getNumbers(ccard1));
+
+appendItem(computerCardList,Julien.getCard(ccard2));
+appendItem(computerColorList,Julien.getColor(ccard2));
+appendItem(computerNumberList,Julien.getNumbers(ccard2));
+
+appendItem(computerCardList,Julien.getCard(ccard3));
+appendItem(computerColorList,Julien.getColor(ccard3));
+appendItem(computerNumberList,Julien.getNumbers(ccard3));
+
+appendItem(computerCardList,Julien.getCard(ccard4));
+appendItem(computerColorList,Julien.getColor(ccard4));
+appendItem(computerNumberList,Julien.getNumbers(ccard4));
+
+appendItem(computerCardList,Julien.getCard(ccard5));
+appendItem(computerColorList,Julien.getColor(ccard5));
+appendItem(computerNumberList,Julien.getNumbers(ccard5));
+
+appendItem(computerCardList,Julien.getCard(ccard6));
+appendItem(computerColorList,Julien.getColor(ccard6));
+appendItem(computerNumberList,Julien.getNumbers(ccard6));
+
+appendItem(computerCardList,Julien.getCard(ccard7));
+appendItem(computerColorList,Julien.getColor(ccard7));
+appendItem(computerNumberList,Julien.getNumbers(ccard7));
+
+
+var firstCard=randomNumber(0,computerCardList.length-1);
+
+setImageURL("playedCard",computerCardList[firstCard]);
+appendItem(playedCardList,computerCardList[firstCard]);
+appendItem(playedColorList,computerColorList[firstCard]);
+appendItem(playedNumberList,computerNumberList[firstCard]);
+
+
+
+for (var l = 0; l < computerCardList.length; l++) {
+  if (computerCardList[firstCard]==computerCardList[l]) {
+   removeItem(computerCardList,l);
+   removeItem(computerNumberList,l);
+   removeItem(computerColorList,l);
+  }
+  
+}
+
+
+setImageURL("card1",playerCardList[0]);
+setImageURL("card2",playerCardList[1]);
+setImageURL("card3",playerCardList[2]);
+setImageURL("card4",playerCardList[3]);
+setImageURL("card5",playerCardList[4]);
+setImageURL("card6",playerCardList[5]);
+setImageURL("card7",playerCardList[6]);
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+//takes the name of the player and switches screens to game screen 1
+//player title is turned into the inputed name 
+//if there is no name then player title is player 1
+onEvent("playNowButton", "click", function( ) {
+  
+  
+  var playerName=getText("nameInput");
+  
+  setProperty("playerIcon","text-color","yellow");
+  setProperty("playerIcon","border-color","yellow");
+  setProperty("playerIcon","text",firstLetter(playerName));
+  setProperty("playerTitle","text",playerName);
+  setScreen("gameScreen1");
+  
+playSound("sound://category_accent/puzzle_game_accent_a_02.mp3");
+
+if (playerName=="") {
+  setProperty("playerTitle","text","Player 1");
+  setProperty("playerIcon","text","P");
+}
+
+
+});
+
+//gets the first letter of any string 
+function firstLetter(name) {
+  return name.substring(0,1);
+}
+
+
+onEvent("nameInput", "input", function( ) {
+      playSound("sound://category_accent/puzzle_game_accent_small_b_01.mp3");
+    });
+     
+
+
+
+
+
+
+
+
+
+
+
+
+//these on events are designed to "highlight" certain buttons when mousing over and off of them
+//some of them are also click buttons that have no other purpose than to switch the screen
+onEvent("playNowButton", "mouseover", function( ) {
+  setProperty("playNowButton","text-color","black");
+  setProperty("playNowButton","background-color","yellow");
+});
+
+
+onEvent("playNowButton", "mouseout", function( ) {
+  setProperty("playNowButton","text-color","yellow");
+  setProperty("playNowButton","background-color","black");
+});
+
+
+onEvent("howToPlayButton", "mouseover", function( ) {
+   setProperty("howToPlayButton","text-color","black");
+  setProperty("howToPlayButton","background-color","yellow");
+});
+
+
+onEvent("howToPlayButton", "mouseout", function( ) {
+   setProperty("howToPlayButton","text-color","yellow");
+  setProperty("howToPlayButton","background-color","black");
+});
+
+
+onEvent("howToPlayButton", "click", function( ) {
+  setScreen("rulesScreen");
+  playSound("sound://category_accent/puzzle_game_accent_a_02.mp3");
+});
+
+
+onEvent("returnButton1", "click", function( ) {
+  setScreen("startScreen");
+  playSound("sound://category_accent/puzzle_game_accent_a_02.mp3");
+});
+
+
+onEvent("returnButton1", "mouseover", function( ) {
+  setProperty("returnButton1","text-color","#362f49");
+  setProperty("returnButton1","background-color","yellow");
+});
+
+
+onEvent("returnButton1", "mouseout", function( ) {
+setProperty("returnButton1","text-color","yellow");
+  setProperty("returnButton1","background-color","#362f49");
+});
+
+
+onEvent("drawButton", "mouseover", function( ) {
+  setProperty("drawButton","text-color","black");
+  setProperty("drawButton","background-color","yellow");
+});
+
+
+onEvent("drawButton", "mouseout", function( ) {
+  setProperty("drawButton","text-color","yellow");
+  setProperty("drawButton","background-color","black");
+});
+
+
+onEvent("skipButton", "mouseover", function( ) {
+    setProperty("skipButton","text-color","black");
+  setProperty("skipButton","background-color","yellow");
+});
+
+
+onEvent("skipButton", "mouseout", function( ) {
+  setProperty("skipButton","text-color","yellow");
+  setProperty("skipButton","background-color","black");
+});
+
+
+onEvent("unoButton", "mouseover", function( ) {
+   setProperty("unoButton","text-color","black");
+  setProperty("unoButton","background-color","yellow");
+});
+
+
+onEvent("unoButton", "mouseout", function( ) {
+   setProperty("unoButton","text-color","yellow");
+  setProperty("unoButton","background-color","black");
+});
+
+
+onEvent("card1", "mouseover", function( ) {
+  setProperty("card1","height",125);
+  setProperty("card1","y",320);
+});
+
+
+onEvent("card1", "mouseout", function( ) {
+  setProperty("card1","height",100);
+  setProperty("card1","y",345);
+});
+
+
+onEvent("card2", "mouseover", function( ) {
+  setProperty("card2","height",125);
+  setProperty("card2","y",320);
+});
+
+
+onEvent("card2", "mouseout", function( ) {
+  setProperty("card2","height",100);
+  setProperty("card2","y",345);
+});
+
+
+onEvent("card3", "mouseover", function( ) {
+  setProperty("card3","height",125);
+  setProperty("card3","y",320);
+});
+
+
+onEvent("card3", "mouseout", function( ) {
+  setProperty("card3","height",100);
+  setProperty("card3","y",345);
+});
+
+
+onEvent("card4", "mouseover", function( ) {
+  setProperty("card4","height",125);
+  setProperty("card4","y",320);
+});
+
+
+onEvent("card4", "mouseout", function( ) {
+  setProperty("card4","height",100);
+  setProperty("card4","y",345);
+});
+
+
+onEvent("card5", "mouseover", function( ) {
+  setProperty("card5","height",125);
+  setProperty("card5","y",320);
+});
+
+
+onEvent("card5", "mouseout", function( ) {
+  setProperty("card5","height",100);
+  setProperty("card5","y",345);
+});
+
+
+onEvent("card6", "mouseover", function( ) {
+  setProperty("card6","height",125);
+  setProperty("card6","y",320);
+});
+
+
+onEvent("card6", "mouseout", function( ) {
+  setProperty("card6","height",100);
+  setProperty("card6","y",345);
+});
+
+
+onEvent("card7", "mouseover", function( ) {
+  setProperty("card7","height",125);
+  setProperty("card7","y",320);
+});
+
+
+onEvent("card7", "mouseout", function( ) {
+  setProperty("card7","height",100);
+  setProperty("card7","y",345);
+});
+
+var index1=0;
+
+//this impliments my own sound system into the app. Instead of muting the cite, you can now press buttons to turn off in game music
+onEvent("soundButton1", "click", function( ) {
+
+index1=index1+1;
+
+if (index1%2==1) {
+  stopSound("uno.mp3");
+  setImageURL("soundButton1","icon://fa-volume-off");
+}
+
+if (index1%2==0) {
+  
+  playSound("uno.mp3",true);
+  setImageURL("soundButton1","icon://fa-volume-up");
+}
+});
+
+var index2=0;
+
+onEvent("soundButton2", "click", function( ) {
+  index2=index2+1;
+   stopSound("unos.mp3");
+  if (index2%2==0) {
+    stopSound("unos.mp3");
+   
+    setProperty("soundButton2","image","icon://fa-volume-off");
+  }
+  
+  if (index2%2==1) {
+  
+   playSound("unos.mp3",true); 
+   setProperty("soundButton2","image","icon://fa-volume-up");
+  }
+  
+  
+});
+
+//designed to reset each list so that the player may run more than one game each time they run the app
+//it also introduces a very simple leveling and xp system.
+var winStreak=0;
+var xp=0;
+var level=0;
+onEvent("playAgainButton", "click", function( ) {
+ 
+ 
+  
+  setScreen("startScreen");
+
+
+playedCardList=[];
+playedColorList=[];
+playedNumberList=[];
+
+playerCardList=[];
+playerColorList=[];
+playerNumberList=[];
+
+computerCardList=[];
+computerColorList=[];
+computerNumberList=[];
+
+
+ 
+setImageURL("playedCard","icon://fa-cloud-upload");
+setProperty("playedCard","icon-color","yellow");
+setImageURL("card1","icon://fa-cloud-upload");
+setImageURL("card2","icon://fa-cloud-upload");
+setImageURL("card3","icon://fa-cloud-upload");
+setImageURL("card4","icon://fa-cloud-upload");
+setImageURL("card5","icon://fa-cloud-upload");
+setImageURL("card6","icon://fa-cloud-upload");
+setImageURL("card7","icon://fa-cloud-upload");
+
+var winner=getText("winnerTitle");
+
+if (winner=="YOU WIN!") {
+  winStreak=winStreak+1;
+  setText("winStreak","WIN STREAK: "+winStreak);
+  xp=xp+1;
+  
+}
+
+if (winner=="YOU LOSE:(") {
+setText("winStreak","WIN STREAK: 0");
+winStreak=0;
+hideElement("flames");
+xp=xp+0.5;
+}
+
+if (winStreak>=5) {
+ showElement("flames");
+ xp=xp+5;
+}
+
+
+if (xp%2==0||xp%2==1) {
+ level=xp; 
+ 
+}
+
+
+if (level>=10) {
+ showElement("flames2"); 
+}
+
+
+
+
+setProperty("level","text","Level: "+level);
+
+
+
+
+
+});
+
+onEvent("playAgainButton", "mouseover", function( ) {
+  setProperty("playAgainButton","background-color","yellow");
+  setProperty("playAgainButton","text-color","black");
+});
+
+onEvent("playAgainButton", "mouseout", function( ) {
+  setProperty("playAgainButton","background-color","black");
+  setProperty("playAgainButton","text-color","yellow");
+});
+
+
+onEvent("return1Button", "click", function( ) {
+  setScreen("startScreen");
+  playSound("sound://category_accent/puzzle_game_accent_a_02.mp3");
+});
+
+onEvent("return1Button", "mouseover", function( ) {
+  setProperty("return1Button","background-color","yellow");
+  setProperty("return1Button","text-color","black");
+});
+
+onEvent("return1Button", "mouseout", function( ) {
+  setProperty("return1Button","background-color","black");
+  setProperty("return1Button","text-color","yellow");
+});
+
+
+
+  
+  
+
+   
+    
