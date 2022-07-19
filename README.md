@@ -1,7 +1,7 @@
 # UNO-Card-Game-Digitized
 This project was my first every computer science project. I completed it my sophomore year of high school for the Create Performance Task for my AP Computer Science Principles class. Making this program was a great experience and really sparked my love for programming. However, looking back at it all of these years later, I realized how much more I could have optimized and expanded upon this game.
 
-The Create Performance Taskl recquired me to put togethr a working program that used and applied all of the core fundamentals of programming such as for-loops, while loops, if statements etc. After about 3 hours of going back and forth between ideas, I decided to create a digitized version of UNO. 
+The Create Performance Task required me to put together a working program that used and applied all of the core fundamentals of programming such as for-loops, while loops, if statements etc. After about 3 hours of going back and forth between ideas, I decided to create a digitized version of UNO. 
 
 To begin my project, I knew that I had to have access to every image of every card in the UNO set. Being the inexperienced person that I once was, I went and downloaded every single card one by one instead of downloading the entire collection of cards at once. 
 
@@ -16,7 +16,7 @@ So that's the procedures and interface of my project. Now let's get down to the 
 Knowing that I had to deal with all of the UNO cards, I started off with making lists for their pngs, number values, colors and whether or not they had a special value. Keep in mind that this was my first ever project, which was way before I discovered the conveniences of OOP using structs and classes. After making these lists, I also made containment lists for the player and the computer decks. 
 
 The first method I wrote was to draw the initial cards to the screen. This method removed the cards from the lists, just like removing them from decks in real life, and placed them on the screen and into the player lists for the player to see. In the background, this also occured for the computer. 
-I then wrote a player turn method and a computer turn method. I used a modulus to decide who's turn it was- this was a core coding memory unlocked for me because I was freaking out when I did this I thought I had cracked the code 😂 . 
+I then wrote a player turn method and a computer turn method. I used a modulus to decide who's turn it was- this was a core coding memory unlocked for me because I was freaking out when I did this - I thought I had cracked the code 😂 . 
 
 After wrapping up these methods, it was time to make a method to end the game once a player had one, which was pretty straight forward. All I did was check for a varying amount of instances within the current game. Once one was reached, I called it and sent the game to the end screen. The only challenge left was being able to play a game over from scratch.
 
